@@ -4,8 +4,8 @@ import axios from 'axios';
 
 interface Question {
   question: string;
-  answer: number; // The correct answer
-  options: number[]; // Multiple choice options
+  answer: number;
+  options: number[];
 }
 
 export default function Exercises() {
@@ -19,8 +19,13 @@ export default function Exercises() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/random-exercises');
-        setQuestions(response.data);
+        const response = await axios.get('https://672343212108960b9cc75e87.mockapi.io/questions');
+        
+        // Shuffle and select the first 20 unique questions
+        const shuffledQuestions = response.data.sort(() => 0.5 - Math.random());
+        const selectedQuestions = shuffledQuestions.slice(0, 20);
+        
+        setQuestions(selectedQuestions);
         setLoading(false);
       } catch (error) {
         setError('Failed to fetch questions. Please try again later.');
@@ -61,15 +66,19 @@ export default function Exercises() {
     setScore(correctAnswers);
   };
 
-  const optionsLabels = ['A', 'B', 'C', 'D']; // Labels for the options
+  const optionsLabels = ['A', 'B', 'C', 'D'];
 
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-4xl font-bold mb-8 text-center text-gray-700">Random Math Exercises</h1>
 
-      {loading && <p className="text-center text-lg text-gray-500">Loading...</p>}
+      {/* Loading indicator */}
+      {loading && (
+        <div className="flex justify-center items-center">
+          <img src="./img/load.gif" alt="Loading..." className="w-24 h-24" />
+        </div>
+      )}
       {error && <p className="text-center text-red-500">{error}</p>}
-
       {score === null ? (
         <div>
           {questions.length > 0 && (
@@ -82,10 +91,7 @@ export default function Exercises() {
               </div>
               <div className="mt-4 flex gap-4">
                 {questions[currentQuestionIndex].options.map((option, idx) => (
-                  <div
-                    key={idx}
-                    className="flex-1"
-                  >
+                  <div key={idx} className="flex-1">
                     <input
                       type="radio"
                       id={`question-${currentQuestionIndex}-option-${idx}`}
@@ -101,9 +107,12 @@ export default function Exercises() {
                         answers[currentQuestionIndex] === option
                           ? ' text-black border-green-600'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-gray-300'
-                      }  peer-checked:text-black `}
+                      } peer-checked:text-black`}
                     >
-                      <span className="font-medium text-black rounded-md bg-white py-2 px-3 border border-1 ">{optionsLabels[idx]}</span> {option}
+                      <span className="font-medium text-black rounded-md bg-white py-2 px-3 border border-1">
+                        {optionsLabels[idx]}
+                      </span>{' '}
+                      {option}
                     </label>
                   </div>
                 ))}
@@ -142,7 +151,8 @@ export default function Exercises() {
         <div className="text-center">
           <h2 className="text-3xl font-semibold text-gray-800 mb-6">Your Score</h2>
           <p className="text-xl text-gray-700">
-            You answered <span className="font-bold">{score}</span> out of <span className="font-bold">{questions.length}</span> questions correctly.
+            You answered <span className="font-bold">{score}</span> out of{' '}
+            <span className="font-bold">{questions.length}</span> questions correctly.
           </p>
         </div>
       )}

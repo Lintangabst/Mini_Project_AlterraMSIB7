@@ -15,12 +15,11 @@ const AdditionAndSubtraction: React.FC = () => {
   const [additionQuestions, setAdditionQuestions] = useState<{ question: string; answer: number }[]>([]);
   const [subtractionQuestions, setSubtractionQuestions] = useState<{ question: string; answer: number }[]>([]);
 
-  // Penjelasan materi
   const explanation = {
     addition: (
       <>
         <h2 className="text-xl font-semibold text-green-700 mb-2">Apa itu Penjumlahan?</h2>
-        <img src="./img/add.png" alt="addition" />
+        <img src="./img/add.png" alt="addition" className="mb-4" />
         <p className="text-lg text-gray-700">
           Penjumlahan adalah operasi matematika yang digunakan untuk menambahkan dua angka atau lebih untuk mendapatkan jumlah keseluruhan.
         </p>
@@ -37,11 +36,11 @@ const AdditionAndSubtraction: React.FC = () => {
     subtraction: (
       <>
         <h2 className="text-xl font-semibold text-green-700 mb-2">Apa itu Pengurangan?</h2>
-        <img src="./img/sub.png" alt="subtracting" />
+        <img src="./img/sub.png" alt="subtraction" className="mb-4" />
         <p className="text-lg text-gray-700">
           Pengurangan adalah operasi matematika yang digunakan untuk mengurangi jumlah dari angka tertentu.
         </p>
-        <h2 className="text-xl font-semibold text-green-700 mt-4">Pengurangan dengan Menghitung Mundur:</h2>
+        <h2 className="text-xl font-semibold text-green-700 mt-4">Cara Mengerjakan Pengurangan:</h2>
         <p className="text-lg text-gray-700">
           Saat kita mengurangi angka, kita bisa membayangkan seperti berjalan mundur. Misalnya, jika kamu punya 5 permen dan mengurangi 2 permen, bayangkan kamu mundur dari 5 dan menghitung mundur: 4, 3.
         </p>
@@ -53,21 +52,26 @@ const AdditionAndSubtraction: React.FC = () => {
     ),
   };
 
-  // Fetch questions from the API using Axios
   useEffect(() => {
-    axios.get('http://localhost:5000/api/addition-questions')
+    axios.get('https://672343212108960b9cc75e87.mockapi.io/materials')
       .then((response) => {
-        setAdditionQuestions(response.data);
-        setAdditionQuestion(response.data[0]?.question);
-      })
-      .catch((error) => console.error('Error fetching addition questions:', error));
+        const data = response.data;
+        const addition = data.filter((item: any) => item.type === 'penjumlahan');
+        const subtraction = data.filter((item: any) => item.type === 'pengurangan');
 
-    axios.get('http://localhost:5000/api/subtraction-questions')
-      .then((response) => {
-        setSubtractionQuestions(response.data);
-        setSubtractionQuestion(response.data[0]?.question);
+        setAdditionQuestions(addition);
+        setSubtractionQuestions(subtraction);
+
+        if (addition.length > 0) {
+          const randomAddition = addition[Math.floor(Math.random() * addition.length)];
+          setAdditionQuestion(randomAddition.question);
+        }
+        if (subtraction.length > 0) {
+          const randomSubtraction = subtraction[Math.floor(Math.random() * subtraction.length)];
+          setSubtractionQuestion(randomSubtraction.question);
+        }
       })
-      .catch((error) => console.error('Error fetching subtraction questions:', error));
+      .catch((error) => console.error('Error fetching questions:', error));
   }, []);
 
   const checkAnswer = (input: number, type: 'addition' | 'subtraction') => {
@@ -80,101 +84,117 @@ const AdditionAndSubtraction: React.FC = () => {
 
     if (input === correctAnswer) {
       setIsCorrect(true);
-      setModalMessage('Jawaban kamu benar! 🎉 Luar biasa!');
+      setModalMessage('Jawaban kamu benar! 🎉');
     } else {
       setIsCorrect(false);
-      setModalMessage('Jawaban kamu salah. Coba lagi! 😅 Jangan khawatir, latihan terus!');
+      setModalMessage('Jawaban kamu salah. Coba lagi!');
     }
 
     setIsModalOpen(true);
   };
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+
+    if (activeLesson === 'addition' && additionQuestions.length > 0) {
+      const randomAddition = additionQuestions[Math.floor(Math.random() * additionQuestions.length)];
+      setAdditionQuestion(randomAddition.question);
+      setAdditionAnswer('');
+    } else if (activeLesson === 'subtraction' && subtractionQuestions.length > 0) {
+      const randomSubtraction = subtractionQuestions[Math.floor(Math.random() * subtractionQuestions.length)];
+      setSubtractionQuestion(randomSubtraction.question);
+      setSubtractionAnswer('');
+    }
+  };
+
   return (
-<div className="flex flex-col lg:flex-row min-h-screen bg-white">
-  {/* Sidebar */}
-  <div className="w-full lg:w-64 bg-gray-50 text-green-700 p-6 space-y-4 shadow-xl">
-    <h1 className="text-2xl font-bold text-center lg:text-left">Pilih Materi</h1>
-    <button
-      onClick={() => setActiveLesson('addition')}
-      className={`w-full p-3 mt-2 text-left rounded-md ${activeLesson === 'addition' ? 'text-green-700' : 'hover:text-green-500'}`}
-    >
-      Penjumlahan
-    </button>
-    <button
-      onClick={() => setActiveLesson('subtraction')}
-      className={`w-full p-3 mt-2 text-left rounded-md ${activeLesson === 'subtraction' ? 'text-green-700' : 'hover:text-green-500'}`}
-    >
-      Pengurangan
-    </button>
-  </div>
-
-  {/* Main content */}
-  <div className="flex-1 p-6 flex flex-col">
-    <h1 className="text-4xl font-extrabold text-green-700 mb-6 text-center lg:text-left">Belajar {activeLesson === 'addition' ? 'Penjumlahan' : 'Pengurangan'}</h1>
-
-    {/* Penjelasan Materi */}
-    <section className="mb-6 bg-white p-6 rounded-lg shadow-md">
-      <div className="text-lg text-gray-700">{explanation[activeLesson]}</div>
-    </section>
-
-    <section className="mb-10 bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-green-700 mb-4">{activeLesson === 'addition' ? 'Penjumlahan' : 'Pengurangan'} Soal:</h2>
-      <div className="mb-4">
-        <p className="text-lg text-gray-700">{activeLesson === 'addition' ? additionQuestion : subtractionQuestion}</p>
-        <input
-          type="number"
-          value={activeLesson === 'addition' ? additionAnswer : subtractionAnswer}
-          onChange={(e) =>
-            activeLesson === 'addition'
-              ? setAdditionAnswer(Number(e.target.value))
-              : setSubtractionAnswer(Number(e.target.value))
-          }
-          className="mt-2 p-2 border-2 border-gray-300 rounded-lg w-full md:w-80"
-          placeholder="Masukkan jawabanmu"
-        />
+    <div className="flex flex-col lg:flex-row min-h-screen bg-white">
+      {/* Sidebar */}
+      <div className="w-full lg:w-64 bg-white text-green-700 p-6 space-y-4">
+        <h1 className="text-2xl font-bold text-center lg:text-left">Pilih Materi</h1>
         <button
-          onClick={() =>
-            checkAnswer(
-              activeLesson === 'addition' ? Number(additionAnswer) : Number(subtractionAnswer),
-              activeLesson
-            )
-          }
-          className="ml-2 mt-4 p-2 bg-green-700 text-white rounded-lg shadow-md hover:bg-green-600 transition-all duration-300"
+          onClick={() => setActiveLesson('addition')}
+          className={`w-full p-3 mt-2 text-left rounded-md ${activeLesson === 'addition' ? 'text-green-700' : 'hover:text-green-500'}`}
         >
-          Cek Jawaban
+          Penjumlahan
+        </button>
+        <button
+          onClick={() => setActiveLesson('subtraction')}
+          className={`w-full p-3 mt-2 text-left rounded-md ${activeLesson === 'subtraction' ? 'text-green-700' : 'hover:text-green-500'}`}
+        >
+          Pengurangan
         </button>
       </div>
-    </section>
-  </div>
 
-  {/* Modal */}
-  {isModalOpen && (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-96">
-        <h2 className="text-2xl font-bold text-center">{isCorrect ? 'Selamat!' : 'Coba Lagi!'}</h2>
-        <img
-          src={`./img/${isCorrect ? 'win.png' : 'lose.png'}`}
-          alt={isCorrect ? 'Correct' : 'Incorrect'}
-          className="w-full h-full mx-auto mt-4 animate-zoomInOut"
-        />
-        <p className="text-center text-lg text-gray-700 mt-4">{modalMessage}</p>
+      {/* Main content */}
+      <div className="flex-1 p-6 flex flex-col space-y-8">
+        <h1 className="text-4xl font-extrabold text-green-700 text-center lg:text-left">
+          Belajar {activeLesson === 'addition' ? 'Penjumlahan' : 'Pengurangan'}
+        </h1>
 
-        <div className="mt-6 text-center">
+        {/* Box Penjelasan Materi */}
+        <section className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+          <h2 className="text-2xl font-semibold text-green-700 mb-4">Penjelasan Materi</h2>
+          {explanation[activeLesson]}
+        </section>
+
+        {/* Box Soal */}
+        <section className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+          <h2 className="text-2xl font-semibold text-green-700 mb-4">Soal</h2>
+          <p className="text-lg text-gray-700">{activeLesson === 'addition' ? additionQuestion : subtractionQuestion}</p>
+          <input
+            type="number"
+            value={activeLesson === 'addition' ? additionAnswer : subtractionAnswer}
+            onChange={(e) =>
+              activeLesson === 'addition'
+                ? setAdditionAnswer(Number(e.target.value))
+                : setSubtractionAnswer(Number(e.target.value))
+            }
+            className="mt-2 p-2 border-2 border-gray-300 rounded-lg w-full md:w-80 "
+            placeholder="Masukkan jawabanmu"
+          />
           <button
-            onClick={() => {
-              setIsModalOpen(false);
-              window.location.reload(); // Refresh the page
-            }}
-            className="p-2 bg-blue-500 text-white rounded-lg hover:bg-green-700 transition-all duration-300"
+            onClick={() =>
+              checkAnswer(
+                activeLesson === 'addition' ? Number(additionAnswer) : Number(subtractionAnswer),
+                activeLesson
+              )
+            }
+            className="mt-4 p-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-all duration-300 ml-4"
           >
-            Tutup
+            Cek Jawaban
           </button>
-        </div>
+        </section>
+      </div>
+
+{/* Modal */}
+{isModalOpen && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-96">
+      <h2 className="text-2xl font-bold text-center">{isCorrect ? 'Selamat!' : 'Coba Lagi!'}</h2>
+      
+      {/* Gambar Menampilkan Hasil */}
+      <img
+        src={`./img/${isCorrect ? 'win.png' : 'lose.png'}`}
+        alt={isCorrect ? 'Correct' : 'Incorrect'}
+        className="w-full h-auto mx-auto mt-4 animate-zoomInOut"
+      />
+
+      <p className="text-center text-lg text-gray-700 mt-4">{modalMessage}</p>
+
+      <div className="mt-6 text-center">
+        <button
+          onClick={() => setIsModalOpen(false)}
+          className="p-2 bg-blue-500 text-white rounded-lg hover:bg-green-700 transition-all duration-300"
+        >
+          Tutup
+        </button>
       </div>
     </div>
-  )}
-</div>
+  </div>
+)}
 
+    </div>
   );
 };
 

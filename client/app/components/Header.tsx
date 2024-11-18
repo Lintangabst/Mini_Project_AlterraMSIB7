@@ -67,7 +67,7 @@ const Header: React.FC = () => {
           <Link href="/Materials" className={getLinkClassName('/Materials')}>Learning Materials</Link>
           <Link href="/Exercises" className={getLinkClassName('/Exercises')}>Start Exercises</Link>
           <Link
-            href="/latihan"
+            href="/Chatbot"
             className="inline-block px-6 py-3 text-white font-semibold bg-gradient-to-r from-green-500 to-green-500 rounded-md hover:from-green-600 hover:to-green-400 transition-all duration-300 ease-in-out"
           >
             Exercises with AI
@@ -83,7 +83,7 @@ const Header: React.FC = () => {
           <Link href="/Materials" className={getLinkClassName('/Materials')} onClick={toggleMenu}>Learning Materials</Link>
           <Link href="/Exercises" className={getLinkClassName('/Exercises')} onClick={toggleMenu}>Start Exercises</Link>
           <Link
-            href="/latihan"
+            href="/Chatbot"
             className="block py-2 px-4 text-white text-center font-semibold bg-gradient-to-r from-green-500 to-green-500 rounded-md hover:from-green-600 hover:to-green-400 transition-all duration-300 ease-in-out"
             onClick={toggleMenu}
           >
