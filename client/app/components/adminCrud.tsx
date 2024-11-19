@@ -23,7 +23,7 @@ const AdminCrudPage = () => {
     options: [],
   });
   const [isEditing, setIsEditing] = useState(false);
-  const [visibleDataCount, setVisibleDataCount] = useState(10); // To limit the number of items initially displayed
+  const [visibleDataCount, setVisibleDataCount] = useState(10);
 
   useEffect(() => {
     dispatch(fetchQuestions());
@@ -34,7 +34,7 @@ const AdminCrudPage = () => {
 
     const updatedQuestion = {
       question: form.question,
-      option: form.options,
+      option: form.options, // Note: We're using 'option' here to match the API
       answer: form.answer,
     };
 
@@ -48,8 +48,13 @@ const AdminCrudPage = () => {
     setIsEditing(false);
   };
 
-  const handleEdit = (item: { id: string; question: string; answer: string; options: string[] }) => {
-    setForm(item);
+  const handleEdit = (item: { id: string; question: string; answer: string; option?: string[] }) => {
+    setForm({
+      id: item.id,
+      question: item.question,
+      answer: item.answer,
+      options: item.option || [], // Convert 'option' to 'options' for consistency in the form
+    });
     setIsEditing(true);
   };
 
@@ -58,7 +63,21 @@ const AdminCrudPage = () => {
   };
 
   const handleSeeMore = () => {
-    setVisibleDataCount((prevCount) => prevCount + 10); // Show 10 more items when clicked
+    setVisibleDataCount((prevCount) => prevCount + 10);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === 'options') {
+      setForm({ ...form, options: value.split(',').map(option => option.trim()) });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
+  };
+
+  const handleCancel = () => {
+    setForm({ id: '', question: '', answer: '', options: [] });
+    setIsEditing(false);
   };
 
   return (
@@ -68,28 +87,36 @@ const AdminCrudPage = () => {
       <form onSubmit={handleSubmit} className="mb-4">
         <input
           type="text"
+          name="question"
           placeholder="Enter question"
           value={form.question}
-          onChange={(e) => setForm({ ...form, question: e.target.value })}
+          onChange={handleInputChange}
           className="border px-4 py-2 mr-2"
         />
         <input
           type="text"
+          name="answer"
           placeholder="Enter answer"
           value={form.answer}
-          onChange={(e) => setForm({ ...form, answer: e.target.value })}
+          onChange={handleInputChange}
           className="border px-4 py-2 mr-2"
         />
         <input
           type="text"
+          name="options"
           placeholder="Enter options (comma separated)"
           value={form.options.join(', ')}
-          onChange={(e) => setForm({ ...form, options: e.target.value.split(',').map(option => option.trim()) })}
+          onChange={handleInputChange}
           className="border px-4 py-2 mr-2"
         />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2">
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 mr-2">
           {isEditing ? 'Update' : 'Create'}
         </button>
+        {isEditing && (
+          <button type="button" onClick={handleCancel} className="bg-gray-500 text-white px-4 py-2">
+            Cancel
+          </button>
+        )}
       </form>
 
       {status === 'loading' && <p>Loading...</p>}
@@ -112,7 +139,7 @@ const AdminCrudPage = () => {
                   <td className="px-4 py-2">{item.id}</td>
                   <td className="px-4 py-2">{item.question}</td>
                   <td className="px-4 py-2">{item.answer}</td>
-                  <td className="px-4 py-2">{item.options.join(', ')}</td>
+                  <td className="px-4 py-2">{item.option ? item.option.join(', ') : ''}</td>
                   <td className="px-4 py-2">
                     <button
                       onClick={() => handleEdit(item)}
