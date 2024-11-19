@@ -63,7 +63,6 @@ const Header: React.FC = () => {
         {/* Links (visible on larger screens) */}
         <div className="hidden lg:flex space-x-4 text-gray-700">
           <Link href="/" className={getLinkClassName('/')}>Home</Link>
-          <Link href="/Garden" className={getLinkClassName('/Garden')}>Virtual Garden</Link>
           <Link href="/Materials" className={getLinkClassName('/Materials')}>Learning Materials</Link>
           <Link href="/Exercises" className={getLinkClassName('/Exercises')}>Start Exercises</Link>
           <Link
@@ -79,7 +78,6 @@ const Header: React.FC = () => {
       {isMenuOpen && (
         <div className="lg:hidden bg-white text-gray-700 p-4 flex flex-col space-y-4 mt-2 border-t border-gray-200">
           <Link href="/" className={getLinkClassName('/')} onClick={toggleMenu}>Home</Link>
-          <Link href="/Garden" className={getLinkClassName('/Garden')} onClick={toggleMenu}>Virtual Garden</Link>
           <Link href="/Materials" className={getLinkClassName('/Materials')} onClick={toggleMenu}>Learning Materials</Link>
           <Link href="/Exercises" className={getLinkClassName('/Exercises')} onClick={toggleMenu}>Start Exercises</Link>
           <Link

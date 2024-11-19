@@ -1,6 +1,13 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Image from 'next/image';
+
+interface Material {
+  question: string;
+  answer: number;
+  type: 'penjumlahan' | 'pengurangan';
+}
 
 const AdditionAndSubtraction: React.FC = () => {
   const [activeLesson, setActiveLesson] = useState<'addition' | 'subtraction'>('addition');
@@ -12,14 +19,14 @@ const AdditionAndSubtraction: React.FC = () => {
   const [modalMessage, setModalMessage] = useState<string>('');
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
 
-  const [additionQuestions, setAdditionQuestions] = useState<{ question: string; answer: number }[]>([]);
-  const [subtractionQuestions, setSubtractionQuestions] = useState<{ question: string; answer: number }[]>([]);
+  const [additionQuestions, setAdditionQuestions] = useState<Material[]>([]);
+  const [subtractionQuestions, setSubtractionQuestions] = useState<Material[]>([]);
 
   const explanation = {
     addition: (
       <>
         <h2 className="text-xl font-semibold text-green-700 mb-2">Apa itu Penjumlahan?</h2>
-        <img src="./img/add.png" alt="addition" className="mb-4" />
+        <Image src="/img/add.png" alt="addition" width={500} height={300} className="mb-4" />
         <p className="text-lg text-gray-700">
           Penjumlahan adalah operasi matematika yang digunakan untuk menambahkan dua angka atau lebih untuk mendapatkan jumlah keseluruhan.
         </p>
@@ -36,7 +43,7 @@ const AdditionAndSubtraction: React.FC = () => {
     subtraction: (
       <>
         <h2 className="text-xl font-semibold text-green-700 mb-2">Apa itu Pengurangan?</h2>
-        <img src="./img/sub.png" alt="subtraction" className="mb-4" />
+        <Image src="/img/sub.png" alt="subtraction" width={500} height={300} className="mb-4" />
         <p className="text-lg text-gray-700">
           Pengurangan adalah operasi matematika yang digunakan untuk mengurangi jumlah dari angka tertentu.
         </p>
@@ -55,9 +62,9 @@ const AdditionAndSubtraction: React.FC = () => {
   useEffect(() => {
     axios.get('https://672343212108960b9cc75e87.mockapi.io/materials')
       .then((response) => {
-        const data = response.data;
-        const addition = data.filter((item: any) => item.type === 'penjumlahan');
-        const subtraction = data.filter((item: any) => item.type === 'pengurangan');
+        const data: Material[] = response.data;
+        const addition = data.filter((item) => item.type === 'penjumlahan');
+        const subtraction = data.filter((item) => item.type === 'pengurangan');
 
         setAdditionQuestions(addition);
         setSubtractionQuestions(subtraction);
@@ -150,7 +157,7 @@ const AdditionAndSubtraction: React.FC = () => {
                 ? setAdditionAnswer(Number(e.target.value))
                 : setSubtractionAnswer(Number(e.target.value))
             }
-            className="mt-2 p-2 border-2 border-gray-300 rounded-lg w-full md:w-80 "
+            className="mt-2 p-2 border-2 border-gray-300 rounded-lg w-full md:w-80"
             placeholder="Masukkan jawabanmu"
           />
           <button
@@ -160,36 +167,37 @@ const AdditionAndSubtraction: React.FC = () => {
                 activeLesson
               )
             }
-            className="mt-4 p-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-all duration-300 ml-4"
+            className="mt-4 p-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700"
           >
             Cek Jawaban
           </button>
         </section>
       </div>
 
-{/* Modal */}
-{isModalOpen && (
+      {isModalOpen && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
     <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-96">
-      <h2 className="text-2xl font-bold text-center">{isCorrect ? 'Selamat!' : 'Coba Lagi!'}</h2>
-      
-      {/* Gambar Menampilkan Hasil */}
-      <img
-        src={`./img/${isCorrect ? 'win.png' : 'lose.png'}`}
+      <h2 className="text-2xl font-bold text-center">
+        {isCorrect ? 'Selamat!' : 'Coba Lagi!'}
+      </h2>
+            {/* Display win/lose image based on correctness */}
+            <Image
+        src={`/img/${isCorrect ? 'win.png' : 'lose.png'}`}
         alt={isCorrect ? 'Correct' : 'Incorrect'}
+        width={500}
+        height={300}
         className="w-full h-auto mx-auto mt-4 animate-zoomInOut"
       />
+      <p className="text-center text-lg mt-4">{modalMessage}</p>
 
-      <p className="text-center text-lg text-gray-700 mt-4">{modalMessage}</p>
 
-      <div className="mt-6 text-center">
-        <button
-          onClick={() => setIsModalOpen(false)}
-          className="p-2 bg-blue-500 text-white rounded-lg hover:bg-green-700 transition-all duration-300"
-        >
-          Tutup
-        </button>
-      </div>
+
+      <button
+        onClick={handleCloseModal}
+        className="mt-6 p-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-all duration-300 w-full"
+      >
+        Tutup
+      </button>
     </div>
   </div>
 )}

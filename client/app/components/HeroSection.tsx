@@ -1,5 +1,6 @@
 // components/HeroSection.tsx
 import React from 'react';
+import Image from 'next/image';
 
 const HeroSection: React.FC = () => {
   return (
@@ -10,7 +11,7 @@ const HeroSection: React.FC = () => {
             Welcome to Mathematics Operation Online Development (MOOD)
           </h1>
           <p className="text-lg text-gray-700 mb-6">
-          Learn number operations in a fun and eco-friendly way! Our materials and exercises are designed not only to boost your math skills but also to inspire care for the planet. Perfect for elementary school students!
+            Learn number operations in a fun and eco-friendly way! Our materials and exercises are designed not only to boost your math skills but also to inspire care for the planet. Perfect for elementary school students!
           </p>
 
           <button className="bg-green-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-green-600">
@@ -18,11 +19,12 @@ const HeroSection: React.FC = () => {
           </button>
         </div>
 
-        {/* Image Section */}
         <div className="md:w-1/2 px-4 mt-8 md:mt-0 flex justify-center">
-          <img
-            src="./img/hero.png" 
+          <Image
+            src="/img/hero.png" 
             alt="Learn Mathematics"
+            width={500} 
+            height={500} 
             className="w-full max-w-md object-cover rounded-md animate-shake"
           />
         </div>

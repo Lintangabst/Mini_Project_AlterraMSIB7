@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Image from 'next/image';
 
 const MultiplicationAndDivision: React.FC = () => {
   const [activeLesson, setActiveLesson] = useState<'multiplication' | 'division'>('multiplication');
@@ -17,7 +18,7 @@ const MultiplicationAndDivision: React.FC = () => {
     multiplication: (
       <>
         <h2 className="text-xl font-semibold text-green-700 mb-2">Apa itu Perkalian?</h2>
-        <img src="./img/multiply.png" alt="multiplication" />
+        <Image src="/img/multiply.png" alt="multiplication" width={500} height={300} />
         <p className="text-lg text-gray-700">
           Perkalian adalah operasi matematika yang digunakan untuk menambah angka yang sama berulang kali.
         </p>
@@ -30,7 +31,7 @@ const MultiplicationAndDivision: React.FC = () => {
     division: (
       <>
         <h2 className="text-xl font-semibold text-green-700 mb-2">Apa itu Pembagian?</h2>
-        <img src="./img/division.png" alt="division" />
+        <Image src="/img/division.png" alt="division" width={500} height={300} />
         <p className="text-lg text-gray-700">
           Pembagian adalah operasi matematika yang digunakan untuk membagi jumlah angka menjadi bagian yang lebih kecil.
         </p>
@@ -42,27 +43,25 @@ const MultiplicationAndDivision: React.FC = () => {
     ),
   };
 
-// Fetch questions from mock API and filter by type
-useEffect(() => {
-  axios.get('https://672343212108960b9cc75e87.mockapi.io/materials')
-    .then((response) => {
-      const allQuestions = response.data;
-      const filteredQuestions = allQuestions.filter(
-        (q: { type: string }) => q.type === (activeLesson === 'multiplication' ? 'perkalian' : 'pembagian')
-      );
+  // Fetch questions from mock API and filter by type
+  useEffect(() => {
+    axios.get('https://672343212108960b9cc75e87.mockapi.io/materials')
+      .then((response) => {
+        const allQuestions = response.data;
+        const filteredQuestions = allQuestions.filter(
+          (q: { type: string }) => q.type === (activeLesson === 'multiplication' ? 'perkalian' : 'pembagian')
+        );
 
-      setQuestions(filteredQuestions);
+        setQuestions(filteredQuestions);
 
-      // Pilih soal secara acak
-      if (filteredQuestions.length > 0) {
-        const randomQuestion = filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
-        setQuestion(randomQuestion.question);
-      }
-    })
-    .catch((error) => console.error('Error fetching questions:', error));
-}, [activeLesson]);
-
-
+        // Pilih soal secara acak
+        if (filteredQuestions.length > 0) {
+          const randomQuestion = filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
+          setQuestion(randomQuestion.question);
+        }
+      })
+      .catch((error) => console.error('Error fetching questions:', error));
+  }, [activeLesson]);
 
   const checkAnswer = (input: number) => {
     const correctAnswer = questions.find((q) => q.question === question)?.answer;
@@ -127,33 +126,34 @@ useEffect(() => {
         </section>
       </div>
 
-{/* Modal */}
-{isModalOpen && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-96">
-      <h2 className="text-2xl font-bold text-center">{isCorrect ? 'Selamat!' : 'Coba Lagi!'}</h2>
-      
-      {/* Gambar Menampilkan Hasil */}
-      <img
-        src={`./img/${isCorrect ? 'win.png' : 'lose.png'}`}
-        alt={isCorrect ? 'Correct' : 'Incorrect'}
-        className="w-full h-auto mx-auto mt-4 animate-zoomInOut"
-      />
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-96">
+            <h2 className="text-2xl font-bold text-center">{isCorrect ? 'Selamat!' : 'Coba Lagi!'}</h2>
+            
+            {/* Gambar Menampilkan Hasil */}
+            <Image
+              src={`./img/${isCorrect ? 'win.png' : 'lose.png'}`}
+              alt={isCorrect ? 'Correct' : 'Incorrect'}
+              width={500}
+              height={300}
+              className="w-full h-auto mx-auto mt-4 animate-zoomInOut"
+            />
 
-      <p className="text-center text-lg text-gray-700 mt-4">{modalMessage}</p>
+            <p className="text-center text-lg text-gray-700 mt-4">{modalMessage}</p>
 
-      <div className="mt-6 text-center">
-        <button
-          onClick={() => setIsModalOpen(false)}
-          className="p-2 bg-blue-500 text-white rounded-lg hover:bg-green-700 transition-all duration-300"
-        >
-          Tutup
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+            <div className="mt-6 text-center">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="p-2 bg-blue-500 text-white rounded-lg hover:bg-green-700 transition-all duration-300"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

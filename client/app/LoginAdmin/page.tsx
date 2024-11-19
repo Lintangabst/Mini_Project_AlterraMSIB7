@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LockIcon, UserIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation'; // Import useRouter for redirection
+import Image from 'next/image'; // Import Image from next/image
 
 export default function Component() {
   // State to manage the input values
@@ -38,10 +39,12 @@ export default function Component() {
         <div className="flex flex-col lg:flex-row">
           {/* Image Section */}
           <div className="lg:w-1/2">
-            <img
-              src="./img/login.png"
+            <Image
+              src="/img/login.png" // Use a relative path or a full URL
               alt="Admin Dashboard Illustration"
               className="h-64 w-full object-cover lg:h-full"
+              width={500} // Set a width for optimization
+              height={500} // Set a height for optimization
             />
           </div>
 

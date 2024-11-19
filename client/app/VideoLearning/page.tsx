@@ -1,20 +1,25 @@
 import React from 'react';
+import Image from 'next/image';  // Import Image from next/image
 
 const VideoLearning: React.FC = () => {
   return (
     <div className="relative container mx-auto p-6">
-            {/* Gambar di kiri bawah, di luar container */}
-            <img
-        src="./img/leftvideo.png" // Ganti dengan path gambar yang sesuai
+      {/* Gambar di kiri bawah, di luar container */}
+      <Image
+        src="/img/leftvideo.png" // Ganti dengan path gambar yang sesuai
         alt="Left Image"
         className="absolute bottom-0 left-0 w-32 md:w-48 hidden md:block"
+        width={192}  // Tentukan lebar gambar
+        height={192} // Tentukan tinggi gambar
       />
 
       {/* Gambar di kanan atas, di luar container */}
-      <img
-        src="./img/rightvideo.png" // Ganti dengan path gambar yang sesuai
+      <Image
+        src="/img/rightvideo.png" // Ganti dengan path gambar yang sesuai
         alt="Right Image"
         className="absolute top-0 right-0 w-32 md:w-48 hidden md:block"
+        width={192}  // Tentukan lebar gambar
+        height={192} // Tentukan tinggi gambar
       />
 
       <h1 className="text-4xl font-bold text-green-800 mb-6 text-center">
@@ -26,6 +31,7 @@ const VideoLearning: React.FC = () => {
       
       {/* Card Container with Preline UI */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Card 1 - Penjelasan Perkalian */}
         <div className="card p-4 bg-white shadow-xl rounded-lg border border-gray-200">
           <div className="card-body">
             <h2 className="text-2xl font-semibold text-green-800 mb-4">Penjelasan Perkalian</h2>
@@ -49,6 +55,7 @@ const VideoLearning: React.FC = () => {
           </div>
         </div>
 
+        {/* Card 2 - Penjelasan Pembagian */}
         <div className="card p-4 bg-white shadow-xl rounded-lg border border-gray-200">
           <div className="card-body">
             <h2 className="text-2xl font-semibold text-green-800 mb-4">Penjelasan Pembagian</h2>
@@ -72,6 +79,7 @@ const VideoLearning: React.FC = () => {
           </div>
         </div>
 
+        {/* Card 3 - Penjelasan Penjumlahan */}
         <div className="card p-4 bg-white shadow-xl rounded-lg border border-gray-200">
           <div className="card-body">
             <h2 className="text-2xl font-semibold text-green-800 mb-4">Penjelasan Penjumlahan</h2>
@@ -95,6 +103,7 @@ const VideoLearning: React.FC = () => {
           </div>
         </div>
 
+        {/* Card 4 - Penjelasan Pengurangan */}
         <div className="card p-4 bg-white shadow-xl rounded-lg border border-gray-200">
           <div className="card-body">
             <h2 className="text-2xl font-semibold text-green-800 mb-4">Penjelasan Pengurangan</h2>

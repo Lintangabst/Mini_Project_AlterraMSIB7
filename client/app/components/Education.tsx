@@ -1,9 +1,10 @@
 'use client'
 import React, { useState } from "react";
+import Image from "next/image";  // Import next/image
 
 const Education: React.FC = () => {
   // State to manage the current image
-  const [currentImage, setCurrentImage] = useState<string>("./img/edu2.png");
+  const [currentImage, setCurrentImage] = useState<string>("/img/edu2.png");
 
   // Function to handle image change
   const handleImageChange = (image: string) => {
@@ -31,7 +32,7 @@ const Education: React.FC = () => {
               {/* Tab 1 */}
               <button
                 type="button"
-                onClick={() => handleImageChange("./img/edu2.png")}
+                onClick={() => handleImageChange("/img/edu2.png")}
                 className="hs-tab-active:bg-white hs-tab-active:shadow-md hs-tab-active:hover:border-transparent text-start hover:bg-green-200 focus:outline-none focus:bg-green-200 p-4 md:p-5 rounded-xl dark:hs-tab-active:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 active"
                 id="tabs-with-card-item-1"
                 aria-selected="true"
@@ -73,7 +74,7 @@ const Education: React.FC = () => {
               {/* Tab 2 */}
               <button
                 type="button"
-                onClick={() => handleImageChange("./img/edu1.png")}
+                onClick={() => handleImageChange("/img/edu1.png")}
                 className="hs-tab-active:bg-white hs-tab-active:shadow-md hs-tab-active:hover:border-transparent text-start hover:bg-green-200 focus:outline-none focus:bg-green-200 p-4 md:p-5 rounded-xl dark:hs-tab-active:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                 id="tabs-with-card-item-2"
                 aria-selected="false"
@@ -112,7 +113,7 @@ const Education: React.FC = () => {
               {/* Tab 3 */}
               <button
                 type="button"
-                onClick={() => handleImageChange("./img/edu3.png")}
+                onClick={() => handleImageChange("/img/edu3.png")}
                 className="hs-tab-active:bg-white hs-tab-active:shadow-md hs-tab-active:hover:border-transparent text-start hover:bg-green-200 focus:outline-none focus:bg-green-200 p-4 md:p-5 rounded-xl dark:hs-tab-active:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                 id="tabs-with-card-item-3"
                 aria-selected="false"
@@ -159,10 +160,13 @@ const Education: React.FC = () => {
             <div className="relative">
               {/* Image */}
               <div>
-                <img
-                  className=" shadow-gray-200 rounded-xl dark:shadow-gray-900/20"
+                <Image
+                  className="shadow-gray-200 rounded-xl dark:shadow-gray-900/20"
                   src={currentImage}
                   alt="Eco-Friendly Math"
+                  width={500}  // Add width
+                  height={300}  // Add height
+                  priority
                 />
               </div>
             </div>

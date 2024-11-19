@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';  // Import Image from next/image
 
 interface MaterialCardProps {
   title: string;
@@ -10,10 +11,12 @@ interface MaterialCardProps {
 const MaterialCard: React.FC<MaterialCardProps> = ({ title, description, image, path }) => {
   return (
     <div className="shadow-lg rounded-lg bg-white hover:shadow-xl transition-shadow max-w-xs">
-      <img
+      <Image
         src={image}
         alt={title}
         className="w-full h-48 object-cover rounded-t-lg"
+        width={500}  // Specify the width of the image
+        height={200} // Specify the height of the image
       />
       <div className="p-6">
         <h5 className="font-bold text-green-800 mb-4 text-xl">{title}</h5>

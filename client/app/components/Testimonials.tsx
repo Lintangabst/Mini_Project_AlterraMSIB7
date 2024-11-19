@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Slider from 'react-slick';
+import Image from 'next/image';  // Import Image from next/image
 
 interface Testimonial {
   name: string;
@@ -13,7 +14,6 @@ const testimonials: Testimonial[] = [
   { name: "Angelina", feedback: "With the environmental theme, children become more aware of the importance of protecting nature.", rating: 4 },
   { name: "Alexandria", feedback: "The virtual garden is very engaging; my children have become more eager to study.", rating: 4 },
 ];
-
 
 const Testimonials: React.FC = () => {
   const settings = {
@@ -31,10 +31,12 @@ const Testimonials: React.FC = () => {
       <div className="container mx-auto flex flex-col md:flex-row items-center">
         {/* Gambar di Kiri */}
         <div className="w-full md:w-1/2 mb-8 md:mb-0">
-          <img
-            src="./img/testi.png" // Ganti dengan gambar sesuai kebutuhan
+          <Image
+            src="/img/testi.png" // Ganti dengan gambar sesuai kebutuhan
             alt="Testimonial"
             className="w-full h-auto object-cover rounded-lg"
+            width={500} // Tentukan lebar gambar
+            height={500} // Tentukan tinggi gambar
           />
         </div>
 
