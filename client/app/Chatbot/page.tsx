@@ -31,7 +31,7 @@ const App: React.FC = () => {
   };
 
   const generateText = async (userInput: string): Promise<void> => {
-    const apiKey = 'AIzaSyD1eWXrY1GUPIkWcYGHJ4HTgtobEaGXqPY'
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string;
 
     if (!apiKey) {
       console.error("API key is missing. Please set it in .env.local");
