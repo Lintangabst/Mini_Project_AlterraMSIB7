@@ -35,7 +35,7 @@ export default function RootLayout({
       >
         <Header />
         {children}
-        <Footer /> {/* Pindahkan Footer ke dalam body */}
+        <Footer />
       </body>
     </html>
   );
